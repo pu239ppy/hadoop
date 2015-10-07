@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import sun.security.krb5.Credentials;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.kerberos.KerberosPrincipal;
@@ -888,8 +889,6 @@ public class UserGroupInformation {
           
           @Override
           public void run() {
-            String cmd = conf.get("hadoop.kerberos.kinit.command",
-                                  "kinit");
             KerberosTicket tgt = getTGT();
             if (tgt == null) {
               return;
@@ -905,11 +904,10 @@ public class UserGroupInformation {
                 if (now < nextRefresh) {
                   Thread.sleep(nextRefresh - now);
                 }
-                Shell.execCommand(cmd, "-R");
+                tgt.refresh();
                 if(LOG.isDebugEnabled()) {
                   LOG.debug("renewed ticket");
                 }
-                reloginFromTicketCache();
                 tgt = getTGT();
                 if (tgt == null) {
                   LOG.warn("No TGT after renewal. Aborting renew thread for " +
