@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.security.auth.RefreshFailedException
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.kerberos.KerberosPrincipal;
@@ -918,9 +919,9 @@ public class UserGroupInformation {
               } catch (InterruptedException ie) {
                 LOG.warn("Terminating renewal thread");
                 return;
-              } catch (IOException ie) {
-                LOG.warn("Exception encountered while running the" +
-                    " renewal command. Aborting renew thread. " + ie);
+              } catch (RefreshFailedException ie) {
+                LOG.warn("Exception encountered while refrshing TGT" +
+                    " Aborting renew thread. " + ie);
                 return;
               }
             }
