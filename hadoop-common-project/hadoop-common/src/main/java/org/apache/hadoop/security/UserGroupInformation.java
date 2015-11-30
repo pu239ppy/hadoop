@@ -908,12 +908,6 @@ public class UserGroupInformation {
                 if(LOG.isDebugEnabled()) {
                   LOG.debug("renewed ticket");
                 }
-                tgt = getTGT();
-                if (tgt == null) {
-                  LOG.warn("No TGT after renewal. Aborting renew thread for " +
-                           getUserName());
-                  return;
-                }
                 nextRefresh = Math.max(getRefreshTime(tgt),
                                        now + kerberosMinSecondsBeforeRelogin);
               } catch (InterruptedException ie) {
